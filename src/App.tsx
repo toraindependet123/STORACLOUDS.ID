@@ -126,7 +126,7 @@ export default function App() {
 
   const redeemCode = () => {
     if (giftCode === adminGiftCode && currentUser) {
-      const newRole = currentUser.role === 'user' ? 'admin2' :
+      const newRole: UserData['role'] = currentUser.role === 'user' ? 'admin2' :
         currentUser.role === 'admin2' ? 'admin3' : currentUser.role;
       if (newRole === currentUser.role) { alert('Sudah menjadi Admin!'); setGiftCode(''); return; }
       const updated = users.map(u => u.username === currentUser.username ? { ...u, role: newRole } : u);
