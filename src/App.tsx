@@ -4,7 +4,7 @@ import {
   Link as LinkIcon, FileText, Trash2, Share2, Copy,
   FolderPlus, MoveRight, CheckSquare, Sun, Moon, Shield, Gift,
   ChevronLeft, ChevronRight, ChevronDown, Search, Plus, RotateCcw, KeyRound,
-  Home, LayoutGrid, User, Camera, UploadCloud, Bell, Filter, Lock
+  Home, LayoutGrid, User, Camera, UploadCloud, Bell, Filter, Lock, Check
 } from 'lucide-react';
 
 type UserData = {
@@ -51,6 +51,7 @@ export default function App() {
   const [newUsername, setNewUsername] = useState('');
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [giftCodeOpen, setGiftCodeOpen] = useState(false);
+  const [loader, setLoader] = useState<{ message: string; status: 'loading' | 'done' } | null>(null);
 
   useEffect(() => {
     const savedUsers = localStorage.getItem('stora_users');
@@ -70,6 +71,16 @@ export default function App() {
 
   const isValidPassword = (pass: string) => /^\d{6,12}$/.test(pass);
 
+  // Smooth loading overlay: spinner while working, then a success checkmark.
+  const runWithLoader = (message: string, action: () => void, successMsg = 'Berhasil!') => {
+    setLoader({ message, status: 'loading' });
+    window.setTimeout(() => {
+      action();
+      setLoader({ message: successMsg, status: 'done' });
+      window.setTimeout(() => setLoader(null), 900);
+    }, 750);
+  };
+
   const handleRegister = () => {
     if (!username.trim()) { alert('Nama pengguna tidak boleh kosong!'); return; }
     if (!isValidPassword(password)) { alert('Sandi HARUS berupa ANGKA, panjang 6–12 digit!'); return; }
@@ -80,19 +91,23 @@ export default function App() {
       role: users.length === 0 ? 'admin1' : 'user',
       active: true
     };
-    setUsers([...users, newUser]);
-    setCurrentUser(newUser);
-    setView('home');
-    setUsername(''); setPassword(''); setConfirmPassword('');
+    runWithLoader('Membuat akun...', () => {
+      setUsers([...users, newUser]);
+      setCurrentUser(newUser);
+      setView('home');
+      setUsername(''); setPassword(''); setConfirmPassword('');
+    }, 'Akun berhasil dibuat!');
   };
 
   const handleLogin = () => {
     const found = users.find(u => u.username === username && u.password === password);
     if (!found) { alert('Nama pengguna atau sandi salah!'); return; }
     if (!found.active) { alert('Akun telah dinonaktifkan!'); return; }
-    setCurrentUser(found);
-    setView('home');
-    setUsername(''); setPassword('');
+    runWithLoader('Masuk...', () => {
+      setCurrentUser(found);
+      setView('home');
+      setUsername(''); setPassword('');
+    }, 'Selamat datang!');
   };
 
   const handleLogout = () => {
@@ -107,11 +122,12 @@ export default function App() {
     if (!currentUser) return;
     if (!isValidPassword(newPassword)) { alert('Sandi baru HARUS berupa ANGKA, panjang 6–12 digit!'); return; }
     if (newPassword !== newPasswordConfirm) { alert('Konfirmasi sandi baru tidak cocok!'); return; }
-    const updated = users.map(u => u.username === currentUser.username ? { ...u, password: newPassword } : u);
-    setUsers(updated);
-    setCurrentUser({ ...currentUser, password: newPassword });
-    setNewPassword(''); setNewPasswordConfirm('');
-    alert('Sandi berhasil diperbarui!');
+    runWithLoader('Menyimpan sandi...', () => {
+      const updated = users.map(u => u.username === currentUser.username ? { ...u, password: newPassword } : u);
+      setUsers(updated);
+      setCurrentUser({ ...currentUser, password: newPassword });
+      setNewPassword(''); setNewPasswordConfirm('');
+    }, 'Sandi diperbarui!');
   };
 
   const handleChangeUsername = () => {
