@@ -96,6 +96,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    if (!window.confirm('Apakah Anda yakin ingin keluar dari akun?')) return;
     setCurrentUser(null);
     setView('auth');
     setSelectMode('none');
