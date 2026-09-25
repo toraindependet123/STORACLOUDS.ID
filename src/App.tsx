@@ -265,6 +265,7 @@ export default function App() {
     const items: { key: View; label: string; icon: React.ReactNode }[] = [
       { key: 'home', label: 'Beranda', icon: <Home size={22} /> },
       { key: 'mystora', label: 'My Stora', icon: <LayoutGrid size={22} /> },
+      { key: 'trash', label: 'Sampah', icon: <Trash2 size={22} /> },
       ...(currentUser.role.startsWith('admin')
         ? [{ key: 'admin' as View, label: 'Admin', icon: <Shield size={22} /> }]
         : []),
