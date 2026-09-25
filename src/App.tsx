@@ -3,8 +3,8 @@ import {
   Cloud, LogOut, Settings, Folder, Image, Video, Music,
   Link as LinkIcon, FileText, Trash2, Share2, Copy,
   FolderPlus, MoveRight, CheckSquare, Sun, Moon, Shield, Gift,
-  ChevronLeft, ChevronRight, Search, Plus, RotateCcw, KeyRound,
-  Home, LayoutGrid, User, Camera, UploadCloud
+  ChevronLeft, ChevronRight, ChevronDown, Search, Plus, RotateCcw, KeyRound,
+  Home, LayoutGrid, User, Camera, UploadCloud, Bell, Filter, Lock
 } from 'lucide-react';
 
 type UserData = {
@@ -385,8 +385,19 @@ export default function App() {
 
           <div className="px-5 -mt-6">
             <div className={`p-5 rounded-2xl ${cardClass}`}>
-              <h2 className="text-xl font-bold mb-1">Selamat Datang, {currentUser.username}! 👋</h2>
-              <p className="text-sm opacity-60">Penyimpananmu aman di STORA CLOUDS ID</p>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h2 className="text-xl font-bold mb-1">Selamat Datang, {currentUser.username}! 👋</h2>
+                  <p className="text-sm opacity-60">Penyimpananmu aman di STORA CLOUDS ID</p>
+                </div>
+                <button
+                  onClick={() => setView('mystora')}
+                  title="Filter"
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${softBg} opacity-70`}
+                >
+                  <Filter size={14} />
+                </button>
+              </div>
               {currentUser.role.startsWith('admin') && (
                 <span className="inline-block mt-2 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">
                   👑 {currentUser.role.toUpperCase()}
@@ -397,7 +408,10 @@ export default function App() {
             <div className="grid grid-cols-2 gap-3 mt-4">
               <button onClick={() => setView('mystora')} className="p-5 rounded-2xl bg-gradient-to-br from-sky-500 to-cyan-400 text-white text-left relative overflow-hidden">
                 <Cloud size={40} className="absolute -right-2 -bottom-2 opacity-30" />
-                <p className="font-semibold relative z-10">My Stora</p>
+                <div className="flex items-center gap-1 relative z-10">
+                  <p className="font-semibold">My Stora</p>
+                  <ChevronDown size={14} />
+                </div>
                 <p className="text-xs opacity-80 relative z-10">Pengaturan</p>
               </button>
               <button onClick={() => setView('trash')} className={`p-5 rounded-2xl ${cardClass} text-left`}>
@@ -570,26 +584,45 @@ export default function App() {
 
       {view === 'settings' && currentUser && (
         <main className="px-5 pt-6">
-          <div className="flex items-center justify-between mb-6">
-            <button onClick={() => setView('home')} className="flex items-center gap-1 text-sm opacity-60"><ChevronLeft size={18} /> Kembali ke</button>
-            <span className={`px-4 py-1.5 rounded-full text-sm font-semibold ${btnPrimary}`}>My Stora</span>
+          <div className="flex items-center justify-between mb-6 gap-2">
+            <button onClick={() => setView('home')} className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${cardClass}`}>
+              <ChevronLeft size={18} />
+            </button>
+            <div className="flex items-center gap-2 text-sm min-w-0">
+              <span className="opacity-60 whitespace-nowrap">Kembali ke</span>
+              <span className={`px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap ${btnPrimary}`}>My Stora</span>
+            </div>
+            <button
+              onClick={() => alert('Belum ada notifikasi baru')}
+              title="Notifikasi"
+              className={`relative w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${cardClass}`}
+            >
+              <Bell size={16} />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500" />
+            </button>
           </div>
           <h2 className="text-2xl font-bold text-center mb-6">Pengaturan</h2>
 
           <h3 className="font-bold mb-3">Tema</h3>
-          <div className="flex gap-3 mb-6">
-            <button onClick={() => setTheme('sky')} className={`flex-1 aspect-square rounded-2xl bg-gradient-to-br from-sky-500 to-cyan-400 flex flex-col items-center justify-center text-white relative ${theme === 'sky' ? 'ring-4 ring-sky-300' : ''}`}>
+          <div className="flex gap-3 mb-6 overflow-x-auto pb-1 -mx-1 px-1">
+            <button onClick={() => setTheme('sky')} className={`flex-shrink-0 w-36 aspect-square rounded-2xl bg-gradient-to-br from-sky-500 to-cyan-400 flex flex-col items-center justify-center text-white relative ${theme === 'sky' ? 'ring-4 ring-sky-300' : ''}`}>
+              <span className="absolute top-2 left-2 w-6 h-6 rounded-full bg-white/20 flex items-center justify-center"><Plus size={14} /></span>
               <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center mb-2"><CheckSquare size={18} className="text-sky-500" /></div>
               <span className="font-semibold text-sm">Biru Langit</span>
             </button>
-            <button onClick={() => setTheme('night')} className={`flex-1 aspect-square rounded-2xl bg-gradient-to-br from-slate-800 to-black flex flex-col items-center justify-center text-white relative ${theme === 'night' ? 'ring-4 ring-slate-400' : ''}`}>
+            <button onClick={() => setTheme('night')} className={`flex-shrink-0 w-36 aspect-square rounded-2xl bg-gradient-to-br from-slate-800 to-black flex flex-col items-center justify-center text-white relative ${theme === 'night' ? 'ring-4 ring-slate-400' : ''}`}>
+              <span className="absolute top-2 left-2 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center"><Plus size={14} /></span>
               <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mb-2"><Moon size={18} /></div>
               <span className="font-semibold text-sm">Hitam Malam</span>
             </button>
+            <div className={`flex-shrink-0 w-36 aspect-square rounded-2xl border-2 border-dashed flex flex-col items-center justify-center opacity-50 ${isNight ? 'border-slate-700' : 'border-slate-300'}`}>
+              <Lock size={20} className="mb-2" />
+              <span className="font-semibold text-xs text-center px-3">Tema Baru Segera</span>
+            </div>
           </div>
 
           <h3 className="font-bold mb-3">Akun</h3>
-          <div className={`rounded-2xl ${cardClass} divide-y ${isNight ? 'divide-slate-700' : 'divide-slate-100'} mb-6`}>
+          <div className={`rounded-3xl ${cardClass} divide-y ${isNight ? 'divide-slate-700' : 'divide-slate-100'} mb-6`}>
             <button onClick={() => alert('Fitur unggah foto profil belum tersedia di demo ini.')} className="w-full flex items-center gap-3 p-4 text-left">
               <div className="w-9 h-9 rounded-full bg-sky-100 flex items-center justify-center text-sky-500"><Camera size={16} /></div>
               <div className="flex-1">
@@ -630,87 +663,102 @@ export default function App() {
           </div>
 
           <h3 className="font-bold mb-3 flex items-center gap-2"><Gift size={16} /> Hadiah Admin</h3>
-          <div className={`flex gap-2 p-2 rounded-2xl ${cardClass} mb-6`}>
-            <input value={giftCode} onChange={(e) => setGiftCode(e.target.value)} placeholder="Masukkan kode"
+          <div className={`flex gap-2 p-2 rounded-full ${cardClass} mb-6`}>
+            <input value={giftCode} onChange={(e) => setGiftCode(e.target.value)} placeholder="Kode hadiah"
               className="flex-1 px-3 py-2 bg-transparent outline-none text-sm" />
-            <button onClick={redeemCode} className={`px-4 py-2 rounded-xl text-sm font-medium ${btnPrimary}`}>Tukar</button>
+            <button onClick={redeemCode} className={`px-5 py-2 rounded-full text-sm font-medium ${btnPrimary}`}>Tukar</button>
           </div>
 
-          <button onClick={handleLogout} className={`w-full py-3 rounded-2xl font-semibold ${btnPrimary} flex items-center justify-center gap-2 mb-8`}>
+          <button onClick={handleLogout} className={`w-full py-3 rounded-full font-semibold ${btnPrimary} flex items-center justify-center gap-2 mb-8`}>
             <LogOut size={16} /> Keluar Akun
           </button>
         </main>
       )}
 
       {view === 'admin' && currentUser && currentUser.role.startsWith('admin') && (
-        <main className="px-5 pt-6">
-          <div className="flex items-center justify-between mb-6">
-            <BackButton />
-            <h2 className="text-lg font-bold">Ruang Admin</h2>
-            <button className="text-sm font-medium text-sky-500" onClick={() => setView('home')}>Kembali</button>
-          </div>
-
-          <div className={`rounded-2xl ${cardClass} p-4 mb-6`}>
-            <p className="text-xs uppercase tracking-wide opacity-50 mb-3">Nama Pengguna</p>
-            <div className="grid grid-cols-[24px_1fr_auto_auto] gap-3 text-xs font-semibold opacity-50 mb-2 px-1">
-              <span></span><span>Pengguna</span><span>Peran</span><span>Aksi</span>
-            </div>
-            <div className={`divide-y ${isNight ? 'divide-slate-700' : 'divide-slate-100'}`}>
-              {users.map(u => (
-                <div key={u.username} className="grid grid-cols-[24px_1fr_auto_auto] gap-3 items-center py-3 px-1">
-                  <button
-                    onClick={() => setSelectedUsers(prev => prev.includes(u.username) ? prev.filter(x => x !== u.username) : [...prev, u.username])}
-                    className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
-                      selectedUsers.includes(u.username) ? 'bg-sky-500 border-sky-500 text-white' : 'border-slate-300'
-                    }`}
-                  >
-                    {selectedUsers.includes(u.username) && <CheckSquare size={12} />}
-                  </button>
-                  <div className="min-w-0">
-                    <p className="font-medium text-sm truncate">{u.username}</p>
-                    <p className="text-xs opacity-50">{u.active ? 'Aktif' : 'Nonaktif'}</p>
-                  </div>
-                  <span className="text-xs font-medium opacity-70 whitespace-nowrap">
-                    {u.role === 'user' ? 'Pengguna' : u.role.toUpperCase()}
-                  </span>
-                  <div className="flex flex-col gap-1 items-end">
-                    <button
-                      onClick={() => toggleActive(u)}
-                      disabled={u.role === 'admin1'}
-                      className="text-xs font-medium text-sky-500 disabled:opacity-30"
-                    >
-                      {u.active ? 'Nonaktifkan' : 'Aktifkan'}
-                    </button>
-                    {u.role.startsWith('admin') && u.role !== 'admin1' && (
-                      <button onClick={() => revokeAdmin(u)} className="text-xs font-medium text-rose-500">Cabut Hak</button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {currentUser.role === 'admin1' && (
-            <div className={`rounded-2xl ${cardClass} p-4 mb-8`}>
-              <button
-                onClick={() => setGiftCodeOpen(!giftCodeOpen)}
-                className="w-full flex items-center justify-between text-left"
-              >
-                <h3 className="font-bold">Ubah Kode Hadiah Admin</h3>
-                <ChevronRight size={18} className={`opacity-50 transition-transform ${giftCodeOpen ? 'rotate-90' : ''}`} />
+        <main>
+          <div className={`${heroGradient} px-5 pt-6 pb-8 rounded-b-3xl text-white`}>
+            <div className="flex items-center justify-between">
+              <button onClick={() => setView('home')} className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
+                <ChevronLeft size={20} />
               </button>
-              {giftCodeOpen && (
-                <div className="mt-3">
-                  <p className="text-xs opacity-50 mb-3">Kode saat ini: <span className="font-mono">{adminGiftCode}</span></p>
-                  <div className="flex gap-2">
-                    <input value={newGiftCode} onChange={(e) => setNewGiftCode(e.target.value)} placeholder="Kode baru"
-                      className={`flex-1 px-3 py-2 rounded-lg border text-sm ${inputClass} outline-none`} />
-                    <button onClick={saveNewGiftCode} className={`px-4 py-2 rounded-lg text-sm font-medium ${btnPrimary}`}>Simpan</button>
-                  </div>
-                </div>
-              )}
+              <h2 className="text-lg font-bold tracking-wide">RUANG ADMIN</h2>
+              <button className="text-sm font-medium opacity-90" onClick={() => setView('home')}>Kembali</button>
             </div>
-          )}
+          </div>
+
+          <div className="px-5 -mt-5">
+            <div className={`rounded-3xl ${cardClass} p-4 mb-6`}>
+              <div className="flex items-center justify-between mb-3 gap-2">
+                <h3 className="font-bold text-lg">Nama Pengguna</h3>
+                <button
+                  onClick={() => setView('home')}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold border whitespace-nowrap ${isNight ? 'border-slate-600 text-sky-300' : 'border-sky-200 text-sky-600'}`}
+                >
+                  Kembali
+                </button>
+              </div>
+              <div className="grid grid-cols-[24px_1fr_auto_auto] gap-3 text-xs font-semibold opacity-50 mb-2 px-1">
+                <span></span><span>Pengguna</span><span>Peran</span><span>Aksi</span>
+              </div>
+              <div className={`divide-y ${isNight ? 'divide-slate-700' : 'divide-slate-100'}`}>
+                {users.length === 0 ? (
+                  <p className="text-sm opacity-40 text-center py-6">Belum ada pengguna</p>
+                ) : users.map(u => (
+                  <div key={u.username} className="grid grid-cols-[24px_1fr_auto_auto] gap-3 items-center py-3 px-1">
+                    <button
+                      onClick={() => setSelectedUsers(prev => prev.includes(u.username) ? prev.filter(x => x !== u.username) : [...prev, u.username])}
+                      className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                        selectedUsers.includes(u.username) ? 'bg-sky-500 border-sky-500 text-white' : 'border-slate-300'
+                      }`}
+                    >
+                      {selectedUsers.includes(u.username) && <CheckSquare size={12} />}
+                    </button>
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm truncate">{u.username}</p>
+                      <p className="text-xs opacity-50">{u.active ? 'Aktif' : 'Nonaktif'}</p>
+                    </div>
+                    <span className="text-xs font-medium opacity-70 whitespace-nowrap">
+                      {u.role === 'user' ? 'Pengguna' : u.role.toUpperCase()}
+                    </span>
+                    <div className="flex flex-col gap-1 items-end">
+                      <button
+                        onClick={() => toggleActive(u)}
+                        disabled={u.role === 'admin1'}
+                        className="text-xs font-medium text-sky-500 disabled:opacity-30"
+                      >
+                        {u.active ? 'Nonaktifkan' : 'Aktifkan'}
+                      </button>
+                      {u.role.startsWith('admin') && u.role !== 'admin1' && (
+                        <button onClick={() => revokeAdmin(u)} className="text-xs font-medium text-rose-500">Cabut Hak</button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {currentUser.role === 'admin1' && (
+              <div className={`rounded-3xl ${cardClass} p-4 mb-8`}>
+                <button
+                  onClick={() => setGiftCodeOpen(!giftCodeOpen)}
+                  className="w-full flex items-center justify-between text-left"
+                >
+                  <h3 className="font-bold">Ubah Kode Hadiah Admin</h3>
+                  <ChevronDown size={18} className={`opacity-50 transition-transform ${giftCodeOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {giftCodeOpen && (
+                  <div className="mt-3">
+                    <p className="text-xs opacity-50 mb-3">Atur kode rahasia yang bisa ditukar pengguna untuk naik menjadi admin.</p>
+                    <p className="text-xs opacity-50 mb-3">Kode saat ini: <span className="font-mono">{adminGiftCode}</span></p>
+                    <input value={newGiftCode} onChange={(e) => setNewGiftCode(e.target.value)} placeholder="Kode hadiah baru"
+                      className={`w-full mb-3 px-4 py-3 rounded-xl border text-sm ${inputClass} outline-none`} />
+                    <button onClick={saveNewGiftCode} className={`w-full py-3 rounded-full font-semibold ${btnPrimary}`}>Simpan</button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </main>
       )}
 
